@@ -1,11 +1,15 @@
-@model Product;
+@model List<Category>;
 @{
     ViewData["Title"] = "Product Detail Page";
-    var product = Model;
-    var categories = ViewBag.Categories;
+    var categories = Model;
+    var product = ViewBag.Product;
 }
 
-<form>
+<form action="/Product/Save" method="put">
+    <div class="form-group">
+        <label for="Id">Id</label>
+        <input readonly type="text" class="form-control" id="Id" name="Id" value="@product.Id">
+    </div>
     <div class="form-group">
         <label for="Name">Name</label>
         <input type="text" class="form-control" id="name" name="name" value="@product.Name">
@@ -27,8 +31,17 @@
         <select class="form-control" id="CategoryId" name="CategoryId">
             @foreach (var category in categories)
             {
-                <option value="@category.Id">@category.Name</option>
+                if (product.CategoryId == category.Id)
+                {
+                    <option selected value="@category.Id">@category.Name</option>
+                }
+                else
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
             }
         </select>
     </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>

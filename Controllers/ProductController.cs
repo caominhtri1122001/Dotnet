@@ -38,14 +38,28 @@ namespace ProductManager.Controllers
         {
             var product = _productService.GetProductById(id);
             if (product == null) return RedirectToAction("Create");
+            ViewBag.Product = product;
             var categories = _productService.GetCategories();
-            ViewBag.Categories = categories;
-            return View(product);
+            return View(categories);
         }
+
+        public IActionResult Delete(int id)
+        {
+            _productService.DeleteProduct(id);
+            return RedirectToAction("Index");
+        }
+
 
         public IActionResult Save(Product product)
         {
-            _productService.CreateProduct(product);
+            if (product.Id == 0)
+            {
+                _productService.CreateProduct(product);
+            }
+            else
+            {
+                _productService.UpdateProduct(product);
+            }
             return RedirectToAction("Index");
         }
     }
